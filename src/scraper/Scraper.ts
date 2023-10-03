@@ -1,7 +1,9 @@
 import { PlaywrightCrawler, Dataset } from "crawlee";
-import { varient, specification } from "../interfaces/scraper";
+import { varient, specification, scrapedData } from "../interfaces/scraper";
 
 export const Scrape = async (urls: string[]) => {
+  let data: scrapedData;
+
   const crawler = new PlaywrightCrawler({
     requestHandler: async ({ page, parseWithCheerio }) => {
       const dataset = await Dataset.open("ProductData");
@@ -145,17 +147,26 @@ export const Scrape = async (urls: string[]) => {
 
       // Save the Data into the DataSet as JSON.
 
-      await dataset.pushData({
+      // await dataset.pushData({
+      //   productTitle,
+      //   images,
+      //   varients,
+      //   specifications,
+      //   sellPoints,
+      // });
+
+      // await dataset.exportToJSON("productData");
+      data = {
         productTitle,
         images,
         varients,
         specifications,
         sellPoints,
-      });
-
-      await dataset.exportToJSON("productData");
+      };
     },
   });
 
   await crawler.run(urls);
+  //@ts-ignore
+  return data;
 };

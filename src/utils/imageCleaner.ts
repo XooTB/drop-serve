@@ -8,7 +8,8 @@ export const cleanImage = (
   ouputName: string
 ) => {
   const reader = fs.createReadStream(imagePath);
-  const writer = fs.createWriteStream("cleanedImage.jpeg");
-
+  const writer = fs.createWriteStream(
+    `${path.resolve(outputFolder, ouputName)}`
+  );
   reader.pipe(new ExifTransformer()).pipe(writer);
 };

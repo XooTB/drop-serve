@@ -1,7 +1,15 @@
 import axios from "axios";
 import * as fs from "node:fs";
 import path from "node:path";
+import ExifTransformer from "exif-be-gone";
 
+// Extract the Image Url from the provided Links.
+export const extractImageUrl = (url: string) => {
+  const link: string = url.replace(/\.jpg.*/, ".jpg");
+  return link;
+};
+
+// Download Images and Save them to folder
 const downloadImage = async (
   url: string,
   i: number,
@@ -18,15 +26,21 @@ const downloadImage = async (
     url: url,
     responseType: "stream",
   }).then(function (response) {
-    response.data.pipe(fs.createWriteStream(fileLocation));
+    response.data
+      .pipe(new ExifTransformer())
+      .pipe(fs.createWriteStream(fileLocation));
   });
 };
 
-export const extractImageUrl = (url: string) => {
-  const link: string = url.replace(/\.jpg.*/, ".jpg");
-  return link;
-};
+//The Main Function to handle everything.
+export const getImages = async (
+  links: string[],
+  path: string,
+  extra?: string
+) => {
+  links.forEach(async (link, i) => {
+    await downloadImage(extractImageUrl(link), i, path, extra ? extra : "");
+  });
 
-export const getImages = async (links: string[], path: string) => {
-  links.forEach((link, i) => downloadImage(extractImageUrl(link), i, path));
+  return true;
 };
