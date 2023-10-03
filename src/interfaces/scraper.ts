@@ -8,3 +8,11 @@ export type specification = {
   category: string;
   value: string;
 };
+
+export type scrapedData = {
+  productTitle: string;
+  images: string[];
+  varients: varient[];
+  sellPoints?: string[];
+  specifications: specification[];
+};
