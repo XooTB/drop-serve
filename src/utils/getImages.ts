@@ -2,6 +2,7 @@ import axios from "axios";
 import * as fs from "node:fs";
 import path from "node:path";
 import ExifTransformer from "exif-be-gone";
+import { pipeline } from "node:stream/promises";
 
 // Extract the Image Url from the provided Links.
 export const extractImageUrl = (url: string) => {
@@ -38,30 +39,23 @@ export const getImages = async (
   folder: string,
   extra?: string
 ) => {
-  for (let i in links) {
+  for (const [i, link] of links.entries()) {
     const fileLocation = path.resolve(
       folder,
       extra ? extra : "",
       `image${i}.jpeg`
     );
 
-    const wait = await axios({
+    const response = await axios({
       method: "get",
-      url: extractImageUrl(links[i]),
+      url: extractImageUrl(link),
       responseType: "stream",
-    })
-      .then(function (response) {
-        response.data
-          .pipe(new ExifTransformer())
-          .pipe(fs.createWriteStream(fileLocation));
-      })
-      .then(() => {
-        return true;
-      });
-    if (wait) {
-      continue;
-    }
-  }
+    });
 
-  return true;
+    await pipeline(
+      response.data,
+      new ExifTransformer(),
+      fs.createWriteStream(fileLocation)
+    );
+  }
 };
