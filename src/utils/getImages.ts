@@ -10,37 +10,58 @@ export const extractImageUrl = (url: string) => {
 };
 
 // Download Images and Save them to folder
-const downloadImage = async (
-  url: string,
-  i: number,
-  location: string,
-  extra?: string
-) => {
-  const fileLocation = path.resolve(
-    location,
-    extra ? extra : "",
-    `image${i}.jpeg`
-  );
-  await axios({
-    method: "get",
-    url: url,
-    responseType: "stream",
-  }).then(function (response) {
-    response.data
-      .pipe(new ExifTransformer())
-      .pipe(fs.createWriteStream(fileLocation));
-  });
-};
+// const downloadImage = async (
+//   url: string,
+//   i: number,
+//   location: string,
+//   extra?: string
+// ) => {
+//   const fileLocation = path.resolve(
+//     location,
+//     extra ? extra : "",
+//     `image${i}.jpeg`
+//   );
+//   await axios({
+//     method: "get",
+//     url: url,
+//     responseType: "stream",
+//   }).then(function (response) {
+//     response.data
+//       .pipe(new ExifTransformer())
+//       .pipe(fs.createWriteStream(fileLocation));
+//   });
+// };
 
 //The Main Function to handle everything.
 export const getImages = async (
   links: string[],
-  path: string,
+  folder: string,
   extra?: string
 ) => {
-  links.forEach(async (link, i) => {
-    await downloadImage(extractImageUrl(link), i, path, extra ? extra : "");
-  });
+  for (let i in links) {
+    const fileLocation = path.resolve(
+      folder,
+      extra ? extra : "",
+      `image${i}.jpeg`
+    );
+
+    const wait = await axios({
+      method: "get",
+      url: extractImageUrl(links[i]),
+      responseType: "stream",
+    })
+      .then(function (response) {
+        response.data
+          .pipe(new ExifTransformer())
+          .pipe(fs.createWriteStream(fileLocation));
+      })
+      .then(() => {
+        return true;
+      });
+    if (wait) {
+      continue;
+    }
+  }
 
   return true;
 };
