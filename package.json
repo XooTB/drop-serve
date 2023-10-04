@@ -6,6 +6,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.421.0",
     "@aws-sdk/s3-request-presigner": "^3.421.0",
+    "@aws-sdk/types": "^3.418.0",
     "axios": "^1.5.1",
     "cors": "^2.8.5",
     "crawlee": "^3.0.0",
@@ -14,6 +15,7 @@
     "express": "^4.18.2",
     "fs-extra": "^11.1.1",
     "nodemon": "^3.0.1",
+    "openai": "^4.11.1",
     "playwright": "*",
     "postgres": "^3.3.5",
     "uid": "^2.0.2"
