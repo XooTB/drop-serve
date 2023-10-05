@@ -1,5 +1,5 @@
 import express from "express";
-import parseController from "../controllers/parseController.ts";
+import parseController from "../controllers/parseController.js";
 
 const router = express.Router();
 

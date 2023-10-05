@@ -1,10 +1,10 @@
-import { getImages, getVarientImage } from "../utils/getImages.ts";
-import { cleanImage } from "../utils/imageCleaner.ts";
-import Bucket from "./Bucket.ts";
+import { getImages, getVarientImage } from "../utils/getImages.js";
+import { cleanImage } from "../utils/imageCleaner.js";
+import Bucket from "./Bucket.js";
 import path from "path";
 import * as fs from "node:fs";
-import Ai from "./Ai.ts";
-import { varient } from "../interfaces/scraper.ts";
+import Ai from "./Ai.js";
+import { varient } from "../interfaces/scraper.js";
 
 export class imageHandler {
   id: string;

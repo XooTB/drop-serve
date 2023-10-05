@@ -1,7 +1,7 @@
 import path from "path";
 import * as fs from "node:fs";
 import { S3 } from "@aws-sdk/client-s3";
-import spacesClient from "../database/spacesClient.ts";
+import spacesClient from "../database/spacesClient.js";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import {
   CreateBucketCommand,

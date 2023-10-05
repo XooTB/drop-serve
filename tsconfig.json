@@ -5,9 +5,7 @@
     "target": "ES2022",
     "outDir": "dist",
     "noUnusedLocals": false,
-    "lib": ["DOM"],
-    "noEmit": true,
-    "allowImportingTsExtensions": true
+    "lib": ["DOM"]
   },
   "include": ["./src/**/*"]
 }

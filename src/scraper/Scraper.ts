@@ -30,6 +30,7 @@ export const Scrape = async (urls: string[]) => {
 
       // Image Collections.
 
+      //@ts-ignore
       $(".images-view-list>li>.images-view-item").each((i, el) => {
         const link = $(el).find("img").attr("src");
         if (link) {
@@ -47,6 +48,7 @@ export const Scrape = async (urls: string[]) => {
       if (skuProperty === 1) {
         $(".sku-item--skus--MmsF8fD")
           .children()
+          //@ts-ignore
           .each((i, el) => {
             const image = $(el).hasClass("sku-item--image--mXsHo3h");
             const text = $(el).hasClass("sku-item--text--s0fbnzX");
@@ -83,6 +85,7 @@ export const Scrape = async (urls: string[]) => {
           .first()
           .find(".sku-item--skus--MmsF8fD")
           .children()
+          //@ts-ignore
           .each((i, el) => {
             const image = $(el).hasClass("sku-item--image--mXsHo3h");
             const text = $(el).hasClass("sku-item--text--s0fbnzX");
@@ -105,6 +108,7 @@ export const Scrape = async (urls: string[]) => {
           .last()
           .find(".sku-item--skus--MmsF8fD")
           .children()
+          //@ts-ignore
           .each((i, el) => {
             const type = $(el).attr("title");
 
@@ -120,7 +124,7 @@ export const Scrape = async (urls: string[]) => {
         varients.push(...FinalVarients);
       }
       //End of Varients Collections
-
+      //@ts-ignore
       $(".seo-sellpoints--sellerPoint--bfm7Az1>li").each((i, el) => {
         const point = $(el).find("pre").text();
 
@@ -133,6 +137,7 @@ export const Scrape = async (urls: string[]) => {
 
       $(
         ".specification--list--fiWsSyv>.specification--line--iUJOqof>.specification--prop--RejitI8"
+        //@ts-ignore
       ).each((i, el) => {
         const specification = {
           category: $(el).find(".specification--title--UbVeyic span").text(),

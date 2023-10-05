@@ -1,5 +1,5 @@
-import { Scrape } from "../scraper/Scraper.ts";
-import main from "../main.ts";
+import { Scrape } from "../scraper/Scraper.js";
+import main from "../main.js";
 
 const parseController = async (req: any, res: any) => {
   const { url } = req.body;

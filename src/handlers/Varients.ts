@@ -1,7 +1,7 @@
-import { varient } from "../interfaces/scraper.ts";
-import Ai from "./Ai.ts";
-import { imageHandler } from "./handleImages.ts";
-import findUniqueModels from "../utils/findUniqueModels.ts";
+import { varient } from "../interfaces/scraper.js";
+import Ai from "./Ai.js";
+import { imageHandler } from "./handleImages.js";
+import findUniqueModels from "../utils/findUniqueModels.js";
 
 class VarientsHandler {
   IH: imageHandler;

@@ -1,26 +1,49 @@
+import { uid } from "uid";
 import path from "node:path";
-import * as fs from "node:fs";
-import { Scrape } from "./scraper/Scraper.ts";
-import { getImages } from "./utils/getImages.ts";
-import { data } from "./temp/data.ts";
-import { getDirname } from "./utils/dirname.ts";
-import { cleanImage } from "./utils/imageCleaner.ts";
-import { listBuckets } from "./handlers/listBuckets.ts";
-import { createBucket } from "./handlers/createBucket.ts";
-import { uploadImage } from "./handlers/uploadImage.ts";
-import handleImages from "./handlers/handleImages.ts";
+import { Scrape } from "./scraper/Scraper.js";
+import { data } from "./temp/data.js";
+import { getDirname } from "./utils/dirname.js";
+import { imageHandler } from "./handlers/handleImages.js";
+import VarientsHandler from "./handlers/Varients.js";
+import Ai from "./handlers/Ai.js";
 
 // Globals
 const __dirname = getDirname(import.meta.url);
 const imageFolder = path.resolve(__dirname, "images");
 
 const main = async (url: string) => {
-  //   const data = await Scrape([url]);
-  await handleImages(data?.images, imageFolder);
+  const data = await Scrape([url]);
+  const id = uid(5);
+  const IH = new imageHandler(id, imageFolder);
+  const AI = new Ai();
+  const titleKeywords = data?.productTitle.split(" ");
+  const keywords = [
+    "Long Sleeve",
+    "Mini skirt",
+    "Women's",
+    "Dress",
+    "TurtleNeck",
+    ...titleKeywords,
+  ];
+  const VH = new VarientsHandler(IH, keywords);
+
+  const title = await AI.generateTitle(data?.productTitle);
+
+  await IH.saveImages(data?.images);
+  const images = await IH.uploadImages(keywords);
+
+  const varients = await VH.handleVarients(data?.varients);
+
+  return {
+    title,
+    images,
+    varients,
+  };
 };
 
-await main("https://www.aliexpress.com/i/4000020773151.html");
+// await main("https://www.aliexpress.com/i/4000020773151.html");
 
+export default main;
 // const info = await uploadImage(imageFolder, "image3.jpeg");
 // console.log(info);
 
