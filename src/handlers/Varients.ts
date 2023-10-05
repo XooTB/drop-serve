@@ -1,6 +1,7 @@
 import { varient } from "../interfaces/scraper.ts";
 import Ai from "./Ai.ts";
 import { imageHandler } from "./handleImages.ts";
+import findUniqueModels from "../utils/findUniqueModels.ts";
 
 class VarientsHandler {
   IH: imageHandler;
@@ -15,12 +16,17 @@ class VarientsHandler {
 
   async handleVarients(varients: varient[]) {
     const array: varient[] = [];
+    const models = findUniqueModels(varients);
     const titles = await this.AI.generateImageTitle(
       this.keywords,
-      varients.length
+      models.length
     );
 
     for (const [i, varient] of varients.entries()) {
+      const modelIndex = models.findIndex((el) => el === varient.model);
+      //@ts-ignore
+      const title = titles[modelIndex];
+
       if (!varient.image) {
         array.push(varient);
         continue;
@@ -30,7 +36,7 @@ class VarientsHandler {
 
       const url = await this.IH.uploadVarientImage(
         image,
-        `${titles[i]}_${varient.model}_${varient.type}`
+        `${title}_${varient.model}_${varient.type}`
       );
 
       array.push({
