@@ -11,29 +11,31 @@ import Ai from "./handlers/Ai.js";
 const __dirname = getDirname(import.meta.url);
 const imageFolder = path.resolve(__dirname, "images");
 
-const main = async (url: string) => {
+const main = async (url: string, keywords: string[]) => {
+  // Get the data from AliExpress
   const data = await Scrape([url]);
+  if (!data) {
+    throw Error("Something went wrong with the scraper. Please try again.");
+  }
+  // Initialize all functions and Handlers.
   const id = uid(5);
   const IH = new imageHandler(id, imageFolder);
   const AI = new Ai();
   const titleKeywords = data?.productTitle.split(" ");
-  const keywords = [
-    "Long Sleeve",
-    "Mini skirt",
-    "Women's",
-    "Dress",
-    "TurtleNeck",
-    ...titleKeywords,
-  ];
-  const VH = new VarientsHandler(IH, keywords);
+  const Ckeywords = [...keywords, ...titleKeywords];
+  const VH = new VarientsHandler(IH, Ckeywords);
 
-  const title = await AI.generateTitle(data?.productTitle);
+  // Generate the new Title for the Product.
+  const title = await AI.generateTitle(data?.productTitle, keywords);
 
+  // Download the Product Images. And Upload them to the Bucket.
   await IH.saveImages(data?.images);
-  const images = await IH.uploadImages(keywords);
+  const images = await IH.uploadImages(Ckeywords);
 
+  // Rename the varient Images and Upload them to the Bucket.
   const varients = await VH.handleVarients(data?.varients);
 
+  // Return the Collected Data.
   return {
     title,
     images,
@@ -44,8 +46,6 @@ const main = async (url: string) => {
 // await main("https://www.aliexpress.com/i/4000020773151.html");
 
 export default main;
-// const info = await uploadImage(imageFolder, "image3.jpeg");
-// console.log(info);
 
 // await Scrape([
 //   "https://www.aliexpress.com/i/4000020773151.html",
@@ -55,9 +55,5 @@ export default main;
 //   "https://www.aliexpress.com/item/1005004619487534.html",
 //   "https://www.aliexpress.com/item/1005006063678919.html",
 // ]);
-
-// getImages(data.images, imageFolder);
-
-// cleanImage(imageFolder + "/productImages/image0.jpeg",);
 
 // process.exit();

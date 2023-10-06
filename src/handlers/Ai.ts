@@ -10,16 +10,21 @@ class Ai {
     });
   }
 
-  async generateTitle(title: string) {
+  async generateTitle(title: string, keywords: string[]) {
     const titleCompletion = await this.AI.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
         {
           role: "user",
-          content: `Write me an Improved Title for this Product and include these Keywords. While keeping a similar length.
-           Title: ${title}.`,
+          content: `Improve this title and Optimize it with these Keywords for Ebay. 
+           Title: ${title}. Keywords: ${keywords}`,
         },
       ],
+      temperature: 0.9,
+      max_tokens: 150,
+      top_p: 1,
+      frequency_penalty: 0.5,
+      presence_penalty: 0.3,
     });
 
     return titleCompletion.choices[0].message.content;
