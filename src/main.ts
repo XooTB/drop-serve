@@ -11,7 +11,7 @@ import Ai from "./handlers/Ai.js";
 const __dirname = getDirname(import.meta.url);
 const imageFolder = path.resolve(__dirname, "images");
 
-const main = async (url: string, keywords: string[]) => {
+const main = async (url: string, keywords?: string[]) => {
   // Get the data from AliExpress
   const data = await Scrape([url]);
   if (!data) {
@@ -22,11 +22,14 @@ const main = async (url: string, keywords: string[]) => {
   const IH = new imageHandler(id, imageFolder);
   const AI = new Ai();
   const titleKeywords = data?.productTitle.split(" ");
-  const Ckeywords = [...keywords, ...titleKeywords];
+  const Ckeywords = [...titleKeywords];
+  if (keywords) {
+    Ckeywords.push(...keywords);
+  }
   const VH = new VarientsHandler(IH, Ckeywords);
 
   // Generate the new Title for the Product.
-  const title = await AI.generateTitle(data?.productTitle, keywords);
+  const title = await AI.generateTitle(data?.productTitle, Ckeywords);
 
   // Download the Product Images. And Upload them to the Bucket.
   await IH.saveImages(data?.images);
