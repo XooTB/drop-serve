@@ -3,10 +3,9 @@ import { varient, specification, scrapedData } from "../interfaces/scraper";
 
 export const Scrape = async (urls: string[]) => {
   let data: scrapedData;
-
   const crawler = new PlaywrightCrawler({
     requestHandler: async ({ page, parseWithCheerio }) => {
-      const dataset = await Dataset.open("ProductData");
+      // const dataset = await Dataset.open("ProductData");
       // const title = await page.title();
       await page.waitForSelector('div[class="images-view-wrap"]');
 

@@ -6,44 +6,65 @@ import { getDirname } from "./utils/dirname.js";
 import { imageHandler } from "./handlers/handleImages.js";
 import VarientsHandler from "./handlers/Varients.js";
 import Ai from "./handlers/Ai.js";
+import { dataType } from "./interfaces/data.js";
+import getDateTime from "./utils/getTime.js";
 
 // Globals
 const __dirname = getDirname(import.meta.url);
 const imageFolder = path.resolve(__dirname, "images");
 
 const main = async (url: string, keywords?: string[]) => {
+  // Initialize the Job ID.
+  const id = uid(5);
+  console.log(`Started the Job. ID: ${id}, Time: ${getDateTime()}`);
+
   // Get the data from AliExpress
   const data = await Scrape([url]);
+
+  //If there's no data, Then throw the below error.
   if (!data) {
     throw Error("Something went wrong with the scraper. Please try again.");
   }
+  console.log(
+    `Successfully Scraped the product. ID: ${id}, Time: ${getDateTime()}`
+  );
+
   // Initialize all functions and Handlers.
-  const id = uid(5);
   const IH = new imageHandler(id, imageFolder);
   const AI = new Ai();
   const titleKeywords = data?.productTitle.split(" ");
   const Ckeywords = [...titleKeywords];
+
+  // The Result Object.
+  const result: dataType = {
+    title: "",
+    images: [],
+    varients: [],
+  };
+
+  // If there are any Keywords provided by the User, Then add them to the Array.
   if (keywords) {
     Ckeywords.push(...keywords);
   }
+
+  // Intantiate the Varients Handler.
   const VH = new VarientsHandler(IH, Ckeywords);
 
   // Generate the new Title for the Product.
-  const title = await AI.generateTitle(data?.productTitle, Ckeywords);
+  result.title = await AI.generateTitle(data?.productTitle, Ckeywords);
 
   // Download the Product Images. And Upload them to the Bucket.
   await IH.saveImages(data?.images);
-  const images = await IH.uploadImages(Ckeywords);
+  result.images = await IH.uploadImages(Ckeywords);
 
-  // Rename the varient Images and Upload them to the Bucket.
-  const varients = await VH.handleVarients(data?.varients);
+  // If there are any Varients, Then process their images and add them to the result Object.
+  if (data.varients.length > 0) {
+    result.varients = await VH.handleVarients(data?.varients);
+  }
 
+  console.log(`Finished the Job. ID: ${id}, Time: ${getDateTime()}`);
   // Return the Collected Data.
-  return {
-    title,
-    images,
-    varients,
-  };
+  return result;
 };
 
 // await main("https://www.aliexpress.com/i/4000020773151.html");
