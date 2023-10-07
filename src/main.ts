@@ -19,12 +19,13 @@ const main = async (url: string, keywords?: string[]) => {
   console.log(`Started the Job. ID: ${id}, Time: ${getDateTime()}`);
 
   // Get the data from AliExpress
-  const data = await Scrape([url]);
+  const data = await Scrape(url, id);
 
   //If there's no data, Then throw the below error.
   if (!data) {
     throw Error("Something went wrong with the scraper. Please try again.");
   }
+  console.log(data);
   console.log(
     `Successfully Scraped the product. ID: ${id}, Time: ${getDateTime()}`
   );
