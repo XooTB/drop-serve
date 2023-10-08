@@ -1,14 +1,18 @@
-require("dotenv").config();
-import postgres from "postgres";
+import "dotenv/config";
+import mongoose from "mongoose";
 
-const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
-const URL = `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}/${PGDATABASE}?options=project%3D${ENDPOINT_ID}`;
+const connect = async () => {
+  try {
+    //@ts-ignore
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("Successfully Connected to MONGODB.");
 
-const sql = postgres(URL, { ssl: "require" });
+    return true;
+  } catch (error) {
+    //@ts-ignore
+    console.log(error.message);
+    return false;
+  }
+};
 
-async function getPgVersion() {
-  const result = await sql`select version()`;
-  console.log(result);
-}
-
-getPgVersion();
+export default connect;

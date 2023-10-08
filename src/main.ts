@@ -8,30 +8,30 @@ import VarientsHandler from "./handlers/Varients.js";
 import Ai from "./handlers/Ai.js";
 import { dataType } from "./interfaces/data.js";
 import getDateTime from "./utils/getTime.js";
+import DBHandler from "./handlers/DB.js";
 
 // Globals
 const __dirname = getDirname(import.meta.url);
 const imageFolder = path.resolve(__dirname, "images");
 
-const main = async (url: string, keywords?: string[]) => {
+const main = async (id: string, url: string, keywords?: string[]) => {
   // Initialize the Job ID.
-  const id = uid(5);
   console.log(`Started the Job. ID: ${id}, Time: ${getDateTime()}`);
 
   // Get the data from AliExpress
-  const data = await Scrape(url, id);
+  // const data = await Scrape(url, id);
 
   //If there's no data, Then throw the below error.
   if (!data) {
     throw Error("Something went wrong with the scraper. Please try again.");
   }
-  console.log(data);
   console.log(
     `Successfully Scraped the product. ID: ${id}, Time: ${getDateTime()}`
   );
 
   // Initialize all functions and Handlers.
   const IH = new imageHandler(id, imageFolder);
+  const DB = new DBHandler();
   const AI = new Ai();
   const titleKeywords = data?.productTitle.split(" ");
   const Ckeywords = [...titleKeywords];
@@ -63,9 +63,18 @@ const main = async (url: string, keywords?: string[]) => {
     result.varients = await VH.handleVarients(data?.varients);
   }
 
-  console.log(`Finished the Job. ID: ${id}, Time: ${getDateTime()}`);
   // Return the Collected Data.
-  return result;
+  console.log(
+    `Successfully finished everything. Adding the data to the DataBase. ID: ${id}, Time: ${getDateTime()}`
+  );
+
+  const jobData = await DB.addJobData(id, result);
+
+  if (jobData) {
+    await DB.setJobStatus(id, "FINISHED");
+  }
+
+  console.log(`Finished the Job. ID: ${id}, Time: ${getDateTime()}`);
 };
 
 // await main("https://www.aliexpress.com/i/4000020773151.html");
