@@ -19,7 +19,7 @@ const main = async (id: string, url: string, keywords?: string[]) => {
   console.log(`Started the Job. ID: ${id}, Time: ${getDateTime()}`);
 
   // Get the data from AliExpress
-  // const data = await Scrape(url, id);
+  const data = await Scrape(url, id);
 
   //If there's no data, Then throw the below error.
   if (!data) {
