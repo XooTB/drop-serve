@@ -63,9 +63,7 @@ class DBHandler {
     try {
       const job = await JobModel.findOne({ ID: id });
 
-      if (job) {
-        return job.status;
-      }
+      return job?.status;
     } catch (error) {
       console.log(error);
       return false;
