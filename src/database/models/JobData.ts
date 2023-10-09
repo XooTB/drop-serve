@@ -3,7 +3,7 @@ import mongoose, { InferSchemaType } from "mongoose";
 const JobDataSchema = new mongoose.Schema({
   ID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "job",
+    ref: "Job",
   },
   title: {
     type: String,

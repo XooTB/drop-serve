@@ -10,7 +10,7 @@ const JobSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  data: { type: mongoose.Schema.Types.ObjectId, ref: "jobdata" },
+  data: { type: mongoose.Schema.Types.ObjectId, ref: "JobData" },
 });
 
 export type Job = InferSchemaType<typeof JobSchema>;

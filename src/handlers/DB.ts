@@ -58,6 +58,19 @@ class DBHandler {
       return false;
     }
   }
+
+  async checkJobStatus(id: string) {
+    try {
+      const job = await JobModel.findOne({ ID: id });
+
+      if (job) {
+        return job.status;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
 }
 
 export default DBHandler;
