@@ -17,7 +17,10 @@ const parseController = async (req: any, res: any) => {
   try {
     await DB.addJob(id, "RUNNING", user.username);
 
-    main(id, url, keywords);
+    main(id, url, keywords).catch(async (err: any) => {
+      await DB.setJobStatus(id, "ERROR");
+      console.log(err.message);
+    });
 
     res.status(200).json({
       message: "Job was added to the Queue successfully. ",
