@@ -2,15 +2,26 @@ import { dataType } from "../interfaces/data.js";
 import connect from "../database/connect.js";
 import JobModel, { Job } from "../database/models/Job.js";
 import JobDataModel, { JobData } from "../database/models/JobData.js";
+import UserModel from "../database/models/user.js";
 
 class DBHandler {
   constructor() {
     connect();
   }
 
-  async addJob(id: string, status: "RUNNING" | "FINISHED" | "ERROR") {
+  async addJob(
+    id: string,
+    status: "RUNNING" | "FINISHED" | "ERROR",
+    username: string
+  ) {
     try {
-      const newJob = await JobModel.create({ ID: id, status });
+      const user = await UserModel.findOne({ username });
+      const newJob = await JobModel.create({ ID: id, status, user: user?._id });
+
+      user?.jobs.push(newJob._id);
+
+      await user?.save();
+
       return newJob;
     } catch (error) {
       console.log(error);

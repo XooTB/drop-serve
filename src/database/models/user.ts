@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  jobs: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Job",
+  },
 });
 
 export type User = InferSchemaType<typeof userSchema>;

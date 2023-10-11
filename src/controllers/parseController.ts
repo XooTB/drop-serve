@@ -11,10 +11,11 @@ const DB = new DBHandler();
 
 const parseController = async (req: any, res: any) => {
   const { url, keywords }: reqData = req.body;
+  const user = req.user;
   const id = uid(5);
 
   try {
-    await DB.addJob(id, "RUNNING");
+    await DB.addJob(id, "RUNNING", user.username);
 
     main(id, url, keywords);
 
