@@ -4,7 +4,7 @@ import Authenticate from "../controllers/AuthMiddleware.js";
 
 const router = express.Router();
 
-router.get("/:id", checkJobStatus);
-router.get("/job/:id", getJobData);
+router.get("/status/:id", Authenticate, checkJobStatus);
+router.get("/:id", Authenticate, getJobData);
 
 export default router;

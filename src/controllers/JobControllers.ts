@@ -4,12 +4,25 @@ import UserModel from "../database/models/user.js";
 
 export const checkJobStatus = async (req: any, res: any) => {
   const id = req.params.id;
+  const user = req.user;
+
   try {
-    const db = new DBHandler();
-    const status = await db.checkJobStatus(id);
+    const job = await JobModel.findOne({ ID: id });
+    if (!job) {
+      res.status(404).json({
+        message: "Invalid Job ID. Job doesn't exist.",
+      });
+      return;
+    } else if (job.user !== user._id) {
+      res.status(201).json({
+        message: "You're not Authrized to access this job.",
+      });
+      return;
+    }
+
     res.status(200).json({
       ID: id,
-      status: status,
+      status: job.status,
     });
   } catch (error) {
     console.log(error);
@@ -18,11 +31,18 @@ export const checkJobStatus = async (req: any, res: any) => {
 
 export const getJobData = async (req: any, res: any) => {
   const id = req.params.id;
+  const user = req.user;
 
   try {
     const job = await JobModel.findOne({ ID: id }).populate("data");
+    if (job?.user !== user._id) {
+      res.status(201).json({
+        message: "You are not authroized to access this job.",
+      });
+      return;
+    }
 
-    res.status(200).json(job);
+    res.status(200).json(job?.data);
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
