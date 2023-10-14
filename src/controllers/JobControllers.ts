@@ -36,7 +36,7 @@ export const getJobData = async (req: any, res: any) => {
 
   try {
     const job = await JobModel.findOne({ ID: id }).populate("data");
-    if (job?.user !== user._id) {
+    if (job?.user?.toString() !== user._id.toString()) {
       res.status(201).json({
         message: "You are not authroized to access this job.",
       });
