@@ -12,6 +12,7 @@
     "@types/luxon": "^3.3.2",
     "axios": "^1.5.1",
     "bcrypt": "^5.1.1",
+    "cloudinary": "^1.41.0",
     "cors": "^2.8.5",
     "crawlee": "^3.0.0",
     "dotenv": "^16.3.1",

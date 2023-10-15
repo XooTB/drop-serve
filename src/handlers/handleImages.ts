@@ -5,6 +5,7 @@ import path from "path";
 import * as fs from "node:fs";
 import Ai from "./Ai.js";
 import { varient } from "../interfaces/scraper.js";
+import Cloud from "./Cloudinary.js";
 
 export class imageHandler {
   id: string;
@@ -13,12 +14,14 @@ export class imageHandler {
   varientFolder: string;
   bucket: Bucket;
   AI: Ai;
+  cloud: Cloud;
 
   constructor(id: string, imageFolder: string) {
     this.id = id;
     this.imageFolder = imageFolder;
     this.bucket = new Bucket();
     this.AI = new Ai();
+    this.cloud = new Cloud();
 
     //Create the Job Directory.
     fs.mkdirSync(`${imageFolder}/${id}`, { recursive: true });
@@ -57,7 +60,9 @@ export class imageHandler {
     for (let [i, image] of images.entries()) {
       const imagePath = path.resolve(this.jobFolder, image);
 
-      let url = await this.bucket.uploadImage(imagePath, titles[i] + ".jpeg");
+      // let url = await this.bucket.uploadImage(imagePath, titles[i] + ".jpeg");
+
+      let url = await this.cloud.uploadImage(imagePath, titles[i] + ".jpeg");
 
       if (url) {
         urls.push(url);
@@ -70,7 +75,10 @@ export class imageHandler {
   async uploadVarientImage(image: string, title: string) {
     const imagePath = path.resolve(this.varientFolder, image);
 
-    const url = await this.bucket.uploadImage(imagePath, `${title}.jpeg`);
+    // const url = await this.bucket.uploadImage(imagePath, `${title}.jpeg`);
+
+    let url = await this.cloud.uploadImage(imagePath, `${title}.jpeg`);
+
     return url;
   }
 }

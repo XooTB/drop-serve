@@ -77,7 +77,7 @@ const main = async (id: string, url: string, keywords?: string[]) => {
   console.log(`Finished the Job. ID: ${id}, Time: ${getDateTime()}`);
 };
 
-// await main("https://www.aliexpress.com/i/4000020773151.html");
+// await main("test", "https://www.aliexpress.com/i/4000020773151.html");
 
 export default main;
 
