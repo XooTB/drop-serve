@@ -15,9 +15,13 @@ class Ai {
       model: "gpt-3.5-turbo",
       messages: [
         {
+          role: "system",
+          content:
+            "You will be provided with a Product title and some keywords. Your task is to integrate those keywords into the title and Optimize it for EBay. While keeping  it under 80 characters ",
+        },
+        {
           role: "user",
-          content: `Improve this title and Optimize it with these Keywords for Ebay. 
-           Title: ${title}. Keywords: ${keywords}`,
+          content: `Product Title: ${title} \n Keywords: ${keywords}`,
         },
       ],
       temperature: 0.9,
@@ -35,8 +39,13 @@ class Ai {
       model: "gpt-3.5-turbo",
       messages: [
         {
+          role: "system",
+          content:
+            "You will be provided with some keywords. Your task is to generate a Image name using these keywords. Use underscores instead of spaces and keep it under 50 characters. ",
+        },
+        {
           role: "user",
-          content: `Write me a title for product images based on these keywords. And substitute spaces for underscore. Keywords: ${keywords}.`,
+          content: `Keywords: ${keywords}.`,
         },
       ],
       temperature: 0.9,
