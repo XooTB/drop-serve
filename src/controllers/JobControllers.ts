@@ -1,4 +1,3 @@
-import DBHandler from "../handlers/DB.js";
 import JobModel from "../database/models/Job.js";
 import UserModel from "../database/models/user.js";
 import JobDataModel from "../database/models/JobData.js";
@@ -115,5 +114,49 @@ export const deleteJob = async (req: any, res: any) => {
     });
   } catch (error: any) {
     console.log(error.message);
+  }
+};
+
+export const addDesc = async (req: any, res: any) => {
+  const id = req.params.id;
+  const user = req.user;
+  const { description } = req.body;
+
+  try {
+    const job = await JobModel.findOne({ ID: id });
+    const jobData = await JobDataModel.findOne({ ID: id });
+
+    if (!job) {
+      res.status(404).json({
+        message: "Job not found.",
+      });
+      return;
+    }
+
+    if (!jobData) {
+      res.status(404).json({
+        message: "No Data found for this Job",
+      });
+      return;
+    }
+
+    if (job?.user?.toString() !== user._id.toString()) {
+      res.status(401).json({
+        message: "You are not authorized to access this Job.",
+      });
+      return;
+    }
+
+    jobData.description = description;
+
+    await jobData.save();
+
+    res.status(200).json({
+      message: "Successfully Added description to the Job.",
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };

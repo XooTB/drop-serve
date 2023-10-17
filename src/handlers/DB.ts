@@ -35,9 +35,11 @@ class DBHandler {
 
       const newData = {
         ID: job?._id,
+        url: data.url,
         title: data.title,
         images: data.images,
         varients: data.varients,
+        specifications: data.specifications,
       };
       const newJob = await JobDataModel.create(newData);
 
