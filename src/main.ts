@@ -1,4 +1,3 @@
-import { uid } from "uid";
 import path from "node:path";
 import { Scrape } from "./scraper/Scraper.js";
 import { data } from "./temp/data.js";
@@ -39,8 +38,10 @@ const main = async (id: string, url: string, keywords?: string[]) => {
   // The Result Object.
   const result: dataType = {
     title: "",
+    url,
     images: [],
     varients: [],
+    specifications: data.specifications,
   };
 
   // If there are any Keywords provided by the User, Then add them to the Array.

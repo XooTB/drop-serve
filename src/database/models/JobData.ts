@@ -5,6 +5,10 @@ const JobDataSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Job",
   },
+  url: {
+    type: String,
+    required: true,
+  },
   title: {
     type: String,
     required: true,
@@ -26,6 +30,19 @@ const JobDataSchema = new mongoose.Schema({
       },
     },
   ],
+  specifications: [
+    {
+      category: {
+        type: String,
+      },
+      value: {
+        type: String,
+      },
+    },
+  ],
+  description: {
+    type: String,
+  },
 });
 
 export type JobData = InferSchemaType<typeof JobDataSchema>;
