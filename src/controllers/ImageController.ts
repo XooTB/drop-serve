@@ -1,3 +1,4 @@
+import JobDataModel from "../database/models/JobData";
 import { imgbox } from "imgbox-js";
 import "dotenv/config";
 
@@ -7,17 +8,29 @@ const config = {
 
 export const imageController = async (req: any, res: any) => {
   const { images }: { images: string[] } = req.body;
-  const urls: string[] = [];
+  const id = req.params.id;
 
-  const response = await imgbox(images, config);
+  try {
+    const jobData = await JobDataModel.findOne({ ID: id });
 
-  const data = response.data.success;
+    if (!jobData) {
+      throw Error(`No Job with ID: ${id} found. Please check the JobID.`);
+    }
 
-  data.forEach((el: any) => {
-    urls.push(el.original_url);
-  });
+    const response = await imgbox(images, config);
+    const data = response.data.success;
 
-  res.status(200).json({
-    urls,
-  });
+    const urls = data.map((url: any) => url.original_url);
+
+    jobData.descImages = urls;
+    await jobData.save();
+
+    res.status(200).json({
+      urls,
+    });
+  } catch (error: any) {
+    req.status(200).json({
+      message: error.message,
+    });
+  }
 };
