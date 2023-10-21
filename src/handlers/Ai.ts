@@ -17,7 +17,7 @@ class Ai {
         {
           role: "system",
           content:
-            "You will be provided with a Product title and some keywords. Your task is to integrate those keywords into the title and Optimize it for EBay. While keeping  it under 80 characters ",
+            "You will be provided with a Product title and some keywords. Your task is to integrate those keywords into the title and Optimize it for EBay, Try to make it sound fluent. While keeping  it under 80 characters ",
         },
         {
           role: "user",
@@ -29,9 +29,14 @@ class Ai {
       top_p: 1,
       frequency_penalty: 0.5,
       presence_penalty: 0.3,
+      n: 3,
     });
 
-    return titleCompletion.choices[0].message.content;
+    const titles = titleCompletion.choices.map(
+      (choice) => choice.message.content
+    );
+
+    return titles;
   }
 
   async generateImageTitle(keywords: string[], n: number) {
@@ -41,7 +46,7 @@ class Ai {
         {
           role: "system",
           content:
-            "You will be provided with some keywords. Your task is to generate a Image name using these keywords. Use underscores instead of spaces and keep it under 50 characters. ",
+            "You will be provided with some keywords. Your task is to generate a Image name using these keywords. Use underscores instead of spaces and keep it under 20 characters. ",
         },
         {
           role: "user",

@@ -1,7 +1,7 @@
 import { varient, specification } from "./scraper";
 
 export type dataType = {
-  title: string | null;
+  titles: (string | null)[];
   url: string;
   images: string[];
   varients: varient[];

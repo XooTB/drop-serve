@@ -37,7 +37,7 @@ const main = async (id: string, url: string, keywords?: string[]) => {
 
   // The Result Object.
   const result: dataType = {
-    title: "",
+    titles: [],
     url,
     images: [],
     varients: [],
@@ -53,7 +53,7 @@ const main = async (id: string, url: string, keywords?: string[]) => {
   const VH = new VarientsHandler(IH, Ckeywords);
 
   // Generate the new Title for the Product.
-  result.title = await AI.generateTitle(data?.productTitle, Ckeywords);
+  result.titles = await AI.generateTitle(data?.productTitle, Ckeywords);
 
   // Download the Product Images. And Upload them to the Bucket.
   await IH.saveImages(data?.images);

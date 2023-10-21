@@ -9,8 +9,8 @@ const JobDataSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  title: {
-    type: String,
+  titles: {
+    type: [String],
     required: true,
   },
   images: {
@@ -42,6 +42,10 @@ const JobDataSchema = new mongoose.Schema({
   ],
   description: {
     type: String,
+  },
+  descImages: {
+    type: [String],
+    required: false,
   },
 });
 
