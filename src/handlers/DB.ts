@@ -36,7 +36,7 @@ class DBHandler {
       const newData = {
         ID: job?._id,
         url: data.url,
-        title: data.titles,
+        titles: data.titles,
         images: data.images,
         varients: data.varients,
         specifications: data.specifications,

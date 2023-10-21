@@ -43,7 +43,7 @@
     "dev": "node --no-warnings=ExperimentalWarning --loader ts-node/esm/transpile-only src/main.ts",
     "build": "tsc",
     "serve": "node --no-warnings=ExperimentalWarning --loader ts-node/esm/transpile-only src/server.ts",
-    "test": "echo \"Error: oops, the actor has no tests yet, sad!\" && exit 1"
+    "test": "node --no-warnings=ExperimentalWarning --loader ts-node/esm/transpile-only src/test.ts"
   },
   "author": "It's not you it's me",
   "license": "ISC"
