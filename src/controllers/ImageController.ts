@@ -1,4 +1,4 @@
-import JobDataModel from "../database/models/JobData";
+import JobDataModel from "../database/models/JobData.js";
 import { imgbox } from "imgbox-js";
 import "dotenv/config";
 
