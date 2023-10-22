@@ -8,6 +8,7 @@ import Ai from "./handlers/Ai.js";
 import { dataType } from "./interfaces/data.js";
 import getDateTime from "./utils/getTime.js";
 import DBHandler from "./handlers/DB.js";
+import * as fs from "node:fs";
 
 // Globals
 const __dirname = getDirname(import.meta.url);
@@ -34,6 +35,7 @@ const main = async (id: string, url: string, keywords?: string[]) => {
   const AI = new Ai();
   const titleKeywords = data?.productTitle.split(" ");
   const Ckeywords = [...titleKeywords];
+  const jobFolder = `${imageFolder}/${id}`;
 
   // The Result Object.
   const result: dataType = {
@@ -74,6 +76,14 @@ const main = async (id: string, url: string, keywords?: string[]) => {
   if (jobData) {
     await DB.setJobStatus(id, "FINISHED");
   }
+
+  console.log(
+    `Added Job Data to the DataBase. ID: ${id}, Time: ${getDateTime()}`
+  );
+
+  console.log(`Removing the Job Folder. ID: ${id}, Time: ${getDateTime()}`);
+
+  fs.rmdirSync(jobFolder, { recursive: true });
 
   console.log(`Finished the Job. ID: ${id}, Time: ${getDateTime()}`);
 };
