@@ -14,7 +14,7 @@ export const checkJobStatus = async (req: any, res: any) => {
       });
       return;
     } else if (job.user !== user._id) {
-      res.status(201).json({
+      res.status(401).json({
         message: "You're not Authrized to access this job.",
       });
       return;

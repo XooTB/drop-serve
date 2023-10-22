@@ -24,7 +24,7 @@ class Cloud {
         filename_override: imageName,
       });
 
-      return res.url;
+      return res.secure_url;
     } catch (err) {
       console.log(err);
       return false;

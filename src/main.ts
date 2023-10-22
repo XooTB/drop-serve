@@ -54,7 +54,6 @@ const main = async (id: string, url: string, keywords?: string[]) => {
 
   // Generate the new Title for the Product.
   result.titles = await AI.generateTitle(data?.productTitle, Ckeywords);
-  console.log(result.titles);
 
   // Download the Product Images. And Upload them to the Bucket.
   await IH.saveImages(data?.images);
