@@ -21,6 +21,7 @@ export const userSignup = async (req: any, res: any) => {
       const token = signJWT(username, email);
       res.status(200).json({
         email,
+        username,
         token,
       });
     }
@@ -42,6 +43,7 @@ export const userLogin = async (req: any, res: any) => {
       const token = signJWT(user.username, user.email);
       res.status(200).json({
         email: user.email,
+        username: user.username,
         token,
       });
     } else {
