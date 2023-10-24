@@ -14,7 +14,7 @@ export const Scrape = async (url: string, id: string) => {
   const crawler = new PlaywrightCrawler(
     {
       requestHandler: async ({ page, parseWithCheerio }) => {
-        await page.waitForSelector('div[class="images-view-wrap"]');
+        await page.waitForSelector('div[class="image-view--wrap--ewraVkn"]');
 
         const $ = await parseWithCheerio();
 
