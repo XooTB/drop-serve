@@ -31,6 +31,7 @@ export const Scrape = async (url: string, id: string) => {
         //@ts-ignore
         $(".slider--box--TJYmEtw")
           .children()
+          //@ts-ignore
           .each((i, el) => {
             const link = $(el).find("img").attr("src");
             if (link) {
