@@ -29,12 +29,14 @@ export const Scrape = async (url: string, id: string) => {
         // Image Collections.
 
         //@ts-ignore
-        $(".images-view-list>li>.images-view-item").each((i, el) => {
-          const link = $(el).find("img").attr("src");
-          if (link) {
-            images.push(link);
-          }
-        });
+        $(".slider--box--TJYmEtw")
+          .children()
+          .each((i, el) => {
+            const link = $(el).find("img").attr("src");
+            if (link) {
+              images.push(link);
+            }
+          });
 
         // Varients Collection.
 
@@ -150,13 +152,13 @@ export const Scrape = async (url: string, id: string) => {
 
         // Save the Data into the DataSet as JSON.
 
-        // await dataset.pushData({
-        //   productTitle,
-        //   images,
-        //   varients,
-        //   specifications,
-        //   sellPoints,
-        // });
+        await Dataset.pushData({
+          productTitle,
+          images,
+          varients,
+          specifications,
+          sellPoints,
+        });
 
         // await dataset.exportToJSON("productData");
         data = {
